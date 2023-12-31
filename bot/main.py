@@ -1,10 +1,8 @@
 import discord
-import sys, os
 import brainf
 
 intents = discord.Intents.default()
 intents.messages = True
-intents.message_content = True
 intents.guild_messages = True
 client = discord.Client(intents=intents)
 
@@ -17,9 +15,19 @@ async def on_ready():
 async def on_message(message):
   if message.author.bot:
     return
+  
+  elif message.content == "^update":
+    if str(message.author.id)[:10] == "8460701070":
+      await message.channel.send("Updating...")
+      await client.logout()
+      exit()
+    else:
+      await message.channel.send("Not you!")
+  
   elif message.content == "^memory":
     await message.channel.send(f"{brainf.memory}\nCell pointer: {brainf.memory_pointer}")
     return
+  
   elif message.content == "^reset":
     brainf.reset()
     await message.channel.send("Reset")
@@ -29,14 +37,6 @@ async def on_message(message):
   if result:
     await message.channel.send(result)
 
-def main():
-  try:
-    client.run(os.getenv("Token"))
-  except:
-    print("Running again?")
-    os.system("kill 1 && " + sys.executable + " " + " ".join(sys.argv))
-    sys.exit()
-
-brainf.initialise()
-main()
-
+if __name__ == "__main__":
+  brainf.initialise()
+  client.run(open("../token.txt").read())
