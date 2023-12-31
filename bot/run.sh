@@ -4,6 +4,6 @@ do
   echo "Updating..."
   sleep 1
   cd ..
-  python3 get_files.py
+  sh get_files.sh
   cd bot
 done
